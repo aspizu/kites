@@ -22,7 +22,7 @@ let socket = null
 const connections = new Map()
 
 function connect() {
-    socket = new WebSocket("ws://localhost:3000/ws")
+    socket = new WebSocket("/ws")
     socket.addEventListener("open", () => {
         console.log("Connected to websocket server")
     })
