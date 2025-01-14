@@ -84,19 +84,19 @@ const $value = document.getElementById("value")
 const $skybox = document.getElementById("skybox")
 
 $hue.addEventListener("input", () => {
-    playerKite.color.h = parseInt($hue.value)
+    playerKite.color.h = parseInt($hue.value) || 0
 })
 
 $saturation.addEventListener("input", () => {
-    playerKite.color.s = parseInt($saturation.value)
+    playerKite.color.s = parseInt($saturation.value) || 0
 })
 
 $value.addEventListener("input", () => {
-    playerKite.color.v = parseInt($value.value)
+    playerKite.color.v = parseInt($value.value) || 0
 })
 
 $username.addEventListener("input", () => {
-    playerKite.username = $username.value
+    playerKite.username = $username.value || getRandomUsername()
 })
 
 $username.addEventListener("keypress", (event) => {
