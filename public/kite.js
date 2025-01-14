@@ -1,5 +1,9 @@
 // @ts-check
 
+/** @type {HTMLImageElement} */
+// @ts-ignore
+const $cursor = document.getElementById("cursor")
+
 export class Kite {
     /** @type {string} */
     username
@@ -15,13 +19,17 @@ export class Kite {
     by
     /** @type {Array<{x: number, y: number}>} */
     points
+    /** @type {boolean} */
+    isCurrentPlayer
 
     /**
+     * @param {string} username
      * @param {number} x
      * @param {number} y
      * @param {{r: number, g: number, b: number}} color
+     * @param {boolean} isCurrentPlayer
      */
-    constructor(username, x, y, color) {
+    constructor(username, x, y, color, isCurrentPlayer) {
         this.username = username
         this.color = color
         this.x = x
@@ -29,6 +37,7 @@ export class Kite {
         this.bx = this.x
         this.by = this.y
         this.points = []
+        this.isCurrentPlayer = isCurrentPlayer
         for (let i = 0; i < 10; i++) {
             this.points.push({
                 x: 0,
@@ -86,6 +95,9 @@ export class Kite {
         ctx.fillRect(0, 0, 100, 100)
         ctx.resetTransform()
         ctx.translate(this.x, this.y)
+        if (!this.isCurrentPlayer) {
+            ctx.drawImage($cursor, 0, 0)
+        }
         ctx.fillStyle = "black"
         ctx.font = "bold 12px sans-serif"
         ctx.fillText(this.username, 10, 10)

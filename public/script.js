@@ -41,6 +41,7 @@ function connect() {
                         message.x,
                         message.y,
                         message.color,
+                        false,
                     ),
                 })
             }
@@ -95,7 +96,7 @@ setInterval(() => {
     time++
 }, 1000 / FPS)
 
-const playerKite = new Kite(getRandomUsername(), 0, 0, getRandomColor())
+const playerKite = new Kite(getRandomUsername(), 0, 0, getRandomColor(), true)
 $username.value = playerKite.username
 
 function update() {
