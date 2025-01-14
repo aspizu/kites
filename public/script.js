@@ -1,5 +1,7 @@
 import {Kite} from "./kite.js"
 
+const FPS = 30
+
 function getRandomColor() {
     return {
         r: Math.floor(Math.random() * 256),
@@ -62,7 +64,7 @@ setInterval(() => {
     update()
     render()
     time++
-}, 30)
+}, 1000 / FPS)
 
 const playerKite = new Kite(0, 0, getRandomColor())
 
