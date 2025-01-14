@@ -132,6 +132,13 @@ window.addEventListener("mousemove", (event) => {
     mouse.y = event.clientY
 })
 
+window.addEventListener("touchmove", (event) => {
+    if (event.touches.length > 0) {
+        mouse.x += event.touches[0].clientX
+        mouse.y += event.touches[0].clientY
+    }
+})
+
 let time = 0
 setInterval(() => {
     update()
