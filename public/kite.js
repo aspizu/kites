@@ -1,6 +1,7 @@
 // @ts-check
 
 import {Thread} from "./thread.js"
+import {hsv} from "./utils.js"
 
 /** @type {HTMLImageElement} */
 // @ts-ignore
@@ -9,7 +10,7 @@ const $cursor = document.getElementById("cursor")
 export class Kite {
     /** @type {string} */
     username
-    /** @type {{r: number, g: number, b: number}} */
+    /** @type {{h: number, s: number, v: number}} */
     color
     /** @type {number} */
     x
@@ -32,7 +33,7 @@ export class Kite {
      * @param {string} username
      * @param {number} x
      * @param {number} y
-     * @param {{r: number, g: number, b: number}} color
+     * @param {{h: number, s: number, v: number}} color
      * @param {boolean} isCurrentPlayer
      */
     constructor(username, x, y, color, isCurrentPlayer) {
@@ -46,7 +47,7 @@ export class Kite {
             x: 0,
             y: 0,
             length: 10,
-            strokeStyle: `rgb(${this.color.r / 2}, ${this.color.g}, ${this.color.b})`,
+            strokeStyle: "",
             lineWidth: 15,
             segmentLength: 15,
             elasticity: 1,
@@ -55,7 +56,7 @@ export class Kite {
             x: 0,
             y: 0,
             length: 10,
-            strokeStyle: `rgb(${this.color.r}, ${this.color.g / 2}, ${this.color.b})`,
+            strokeStyle: "",
             lineWidth: 5,
             segmentLength: 20,
             elasticity: 1.5,
@@ -64,7 +65,7 @@ export class Kite {
             x: 0,
             y: 0,
             length: 10,
-            strokeStyle: `rgb(${this.color.r}, ${this.color.g}, ${this.color.b / 2})`,
+            strokeStyle: "",
             lineWidth: 4,
             segmentLength: 10,
             elasticity: 0.9,
@@ -80,6 +81,21 @@ export class Kite {
      * @param {number} time
      */
     update(time) {
+        this.tail1.strokeStyle = hsv({
+            ...this.color,
+            h: this.color.h + 5,
+            v: this.color.v - 10,
+        })
+        this.tail2.strokeStyle = hsv({
+            ...this.color,
+            h: this.color.h + 10,
+            v: this.color.v - 20,
+        })
+        this.tail3.strokeStyle = hsv({
+            ...this.color,
+            h: this.color.h + 15,
+            v: this.color.v - 30,
+        })
         const angle = this.getAngle()
         this.bx +=
             (this.x +
@@ -109,9 +125,9 @@ export class Kite {
         ctx.resetTransform()
         ctx.translate(this.x, this.y)
         ctx.rotate(Math.PI * (1 / 2 + 1 / 4) + angle)
-        ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`
+        ctx.fillStyle = hsv(this.color)
         ctx.fillRect(0, 0, 100, 100)
-        ctx.strokeStyle = `rgb(${this.color.r / 3}, ${this.color.g / 3}, ${this.color.b / 3})`
+        ctx.strokeStyle = hsv({...this.color, v: this.color.v / 3})
         ctx.lineWidth = 3
         ctx.strokeRect(0, 0, 100, 100)
         ctx.beginPath()

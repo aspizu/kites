@@ -1,14 +1,118 @@
+/* CSS */
+:root {
+    font-family: Inter, sans-serif;
+    font-feature-settings:
+        "liga" 1,
+        "calt" 1; /* fix for Chrome */
+}
+@supports (font-variation-settings: normal) {
+    :root {
+        font-family: InterVariable, sans-serif;
+    }
+}
+/* 1. Use a more-intuitive box-sizing model */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
 * {
     margin: 0;
-    padding: 0;
+}
+
+body {
+    /* 3. Add accessible line-height */
+    line-height: 1.5;
+    /* 4. Improve text rendering */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 5. Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+/* 6. Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* 7. Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+/* 8. Improve line wrapping */
+p {
+    text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+/*
+    9. Create a root stacking context
+  */
+#root,
+#__next {
+    isolation: isolate;
 }
 
 body {
     overflow: hidden;
+    font-size: 12px;
 }
 
-#username {
+.input {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    label {
+        font-weight: 600;
+        font-size: 10px;
+    }
+    .input__help {
+        font-size: 10px;
+        color: #888;
+    }
+    textarea {
+        resize: vertical;
+        min-height: 30px;
+    }
+}
+
+#overlay {
+    display: flex;
+    flex-direction: column;
     position: fixed;
-    top: 10px;
-    left: 10px;
+    top: 0;
+    left: 0;
+    gap: 5px;
+    padding: 10px;
+    opacity: 0.5;
+    &:hover,
+    &:focus-within {
+        opacity: 1;
+    }
 }

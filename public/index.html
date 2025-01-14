@@ -3,14 +3,41 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML in your document's head -->
+        <link rel="preconnect" href="https://rsms.me/" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         <link rel="stylesheet" href="/public/style.css" />
         <title>Kites</title>
     </head>
     <body>
-        <input id="username" type="text" placeholder="Username" aria-label="Username" />
+        <div id="overlay">
+            <div class="input">
+                <label for="username">Username</label>
+                <textarea
+                    id="username"
+                    type="text"
+                    placeholder="Username"
+                    aria-label="Username"
+                ></textarea>
+                <span class="input__help">Press Enter to type</span>
+            </div>
+            <div class="input">
+                <label for="hue">Hue</label>
+                <input id="hue" type="range" min="0" max="100" value="0" />
+            </div>
+            <div class="input">
+                <label for="saturation">Saturation</label>
+                <input id="saturation" type="range" min="0" max="100" value="0" />
+            </div>
+            <div class="input">
+                <label for="value">Value</label>
+                <input id="value" type="range" min="0" max="100" value="0" />
+            </div>
+        </div>
         <canvas id="canvas"></canvas>
         <div style="display: none">
             <img id="cursor" src="/public/cursor.png" />
+            <img id="skybox" src="/public/skybox.png" />
         </div>
         <script type="module" src="/public/script.js"></script>
     </body>
