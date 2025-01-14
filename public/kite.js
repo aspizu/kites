@@ -81,7 +81,11 @@ export class Kite {
      */
     update(time) {
         const angle = this.getAngle()
-        this.bx += (this.x + Math.sin(time / 10) * 10 - this.bx) * 0.1
+        this.bx +=
+            (this.x +
+                (2 + Math.sin(time / 10) + Math.sin(time / 5) * 0.5) * 15 -
+                this.bx) *
+            0.1
         this.by += (this.y + 100 - this.by) * 0.1
         this.tail1.x = this.x - Math.cos(angle) * (Math.sqrt(2) * (100 - 15))
         this.tail1.y = this.y - Math.sin(angle) * (Math.sqrt(2) * (100 - 15))
@@ -107,13 +111,21 @@ export class Kite {
         ctx.rotate(Math.PI * (1 / 2 + 1 / 4) + angle)
         ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`
         ctx.fillRect(0, 0, 100, 100)
+        ctx.strokeStyle = `rgb(${this.color.r / 3}, ${this.color.g / 3}, ${this.color.b / 3})`
+        ctx.lineWidth = 3
+        ctx.strokeRect(0, 0, 100, 100)
+        ctx.beginPath()
+        ctx.arc(100, 100, 100, Math.PI, 1.5 * Math.PI)
+        ctx.moveTo(0, 0)
+        ctx.lineTo(100, 100)
+        ctx.stroke()
         ctx.resetTransform()
         ctx.translate(this.x, this.y)
         if (!this.isCurrentPlayer) {
             ctx.drawImage($cursor, 0, 0)
         }
-        ctx.fillStyle = "white"
+        ctx.fillStyle = "black"
         ctx.font = "bold 12px sans-serif"
-        ctx.fillText(this.username, 10, 10)
+        ctx.fillText(this.username, 10, -10)
     }
 }

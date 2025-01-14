@@ -43,7 +43,11 @@ export class Thread {
         let i = 0
         for (const point of this.points) {
             const fac = this.elasticity / (i + 1)
-            point.x += (last.x - point.x) * fac
+            point.x +=
+                (last.x +
+                    (2 + Math.sin(time / 10) + Math.sin(time / 5) * 0.5) * 5 -
+                    point.x) *
+                fac
             point.y += (last.y + this.segmentLength - point.y) * fac
             last.x = point.x
             last.y = point.y
