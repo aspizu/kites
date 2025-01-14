@@ -83,17 +83,17 @@ export class Kite {
     update(time) {
         this.tail1.strokeStyle = hsv({
             ...this.color,
-            h: this.color.h + 5,
+            h: this.color.h - 5,
             v: this.color.v - 10,
         })
         this.tail2.strokeStyle = hsv({
             ...this.color,
-            h: this.color.h + 10,
+            h: this.color.h - 10,
             v: this.color.v - 20,
         })
         this.tail3.strokeStyle = hsv({
             ...this.color,
-            h: this.color.h + 15,
+            h: this.color.h - 15,
             v: this.color.v - 30,
         })
         const angle = this.getAngle()
@@ -119,29 +119,57 @@ export class Kite {
      */
     render(ctx) {
         const angle = this.getAngle()
-        this.tail1.render(ctx)
-        this.tail2.render(ctx)
-        this.tail3.render(ctx)
-        ctx.resetTransform()
+
+        // Render the kite tails dynamically
+        ;[this.tail1, this.tail2, this.tail3].forEach((tail) => tail.render(ctx))
+
+        // Save context state
+        ctx.save()
+
+        // Position and rotate the kite
         ctx.translate(this.x, this.y)
         ctx.rotate(Math.PI * (1 / 2 + 1 / 4) + angle)
-        ctx.fillStyle = hsv(this.color)
+
+        // Add gradient fill for the kite
+        const gradient = ctx.createLinearGradient(0, 0, 100, 100)
+        gradient.addColorStop(0, hsv({...this.color, v: this.color.v}))
+        gradient.addColorStop(
+            1,
+            hsv({...this.color, h: this.color.h - 10, v: this.color.v / 1.5}),
+        )
+        ctx.fillStyle = gradient
         ctx.fillRect(0, 0, 100, 100)
+
+        // Add a semi-transparent border
         ctx.strokeStyle = hsv({...this.color, v: this.color.v / 3})
         ctx.lineWidth = 3
         ctx.strokeRect(0, 0, 100, 100)
+
+        // Add a decorative arc
         ctx.beginPath()
         ctx.arc(100, 100, 100, Math.PI, 1.5 * Math.PI)
         ctx.moveTo(0, 0)
         ctx.lineTo(100, 100)
         ctx.stroke()
-        ctx.resetTransform()
+
+        // Restore the context to draw static elements
+        ctx.restore()
+        ctx.save()
+
+        // Draw username with shadow
         ctx.translate(this.x, this.y)
+        ctx.fillStyle = "black"
+        ctx.font = "bold 12px sans-serif"
+        ctx.shadowColor = "rgba(0, 0, 0, 0.5)"
+        ctx.shadowBlur = 2
+        ctx.fillText(this.username, 10, -10)
+
+        // Draw cursor if not the current player
         if (!this.isCurrentPlayer) {
             ctx.drawImage($cursor, 0, 0)
         }
-        ctx.fillStyle = "black"
-        ctx.font = "bold 12px sans-serif"
-        ctx.fillText(this.username, 10, -10)
+
+        // Restore context
+        ctx.restore()
     }
 }
