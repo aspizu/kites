@@ -4,7 +4,12 @@ import {Elysia, file} from "elysia"
 
 const app = new Elysia()
     .use(swagger())
-    .use(staticPlugin({indexHTML: true}))
+    .use(
+        staticPlugin({
+            noCache: !!process.env.DEBUG,
+            indexHTML: true,
+        }),
+    )
     .get("/", () => file("./public/index.html"))
     .listen(3000)
 
