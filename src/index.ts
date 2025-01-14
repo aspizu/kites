@@ -9,9 +9,9 @@ interface Connection {
     x: number
     y: number
     color: {
-        r: number
-        g: number
-        b: number
+        h: number
+        s: number
+        v: number
     }
     ws: ElysiaWS
 }
@@ -35,9 +35,9 @@ const app = new Elysia()
                 x: 0,
                 y: 0,
                 color: {
-                    r: 0,
-                    g: 0,
-                    b: 0,
+                    h: 0,
+                    s: 0,
+                    v: 0,
                 },
                 ws,
             })
@@ -58,7 +58,11 @@ const app = new Elysia()
                 connection.username = message.username
                 connection.x = message.x
                 connection.y = message.y
-                connection.color = message.color
+                connection.color = {
+                    h: message.color.h,
+                    s: message.color.s,
+                    v: message.color.v,
+                }
                 for (const otherConnection of connections.values()) {
                     if (otherConnection.id === connection.id) continue
                     otherConnection.ws.send({
