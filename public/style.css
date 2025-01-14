@@ -1,14 +1,11 @@
+@font-face {
+    font-family: BetterPixels;
+    src: url("/public/BetterPixels.ttf");
+}
+
 /* CSS */
 :root {
     font-family: Inter, sans-serif;
-    font-feature-settings:
-        "liga" 1,
-        "calt" 1; /* fix for Chrome */
-}
-@supports (font-variation-settings: normal) {
-    :root {
-        font-family: InterVariable, sans-serif;
-    }
 }
 /* 1. Use a more-intuitive box-sizing model */
 *,
