@@ -8,7 +8,7 @@ function getRandomColor() {
     }
 }
 
-const socket = new WebSocket("ws://localhost:3000/ws")
+const socket = new WebSocket("/ws")
 
 socket.addEventListener("open", () => {
     console.log("🦊 Connected to the server")
