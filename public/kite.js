@@ -159,9 +159,7 @@ export class Kite {
         // Draw username with shadow
         ctx.translate(this.x, this.y)
         ctx.fillStyle = "black"
-        ctx.font = "bold 12px sans-serif"
-        ctx.shadowColor = "rgba(0, 0, 0, 0.5)"
-        ctx.shadowBlur = 2
+        ctx.font = "bold 16px monospace"
         ctx.fillText(this.username, 10, -10)
 
         // Draw cursor if not the current player

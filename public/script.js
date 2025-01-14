@@ -66,8 +66,6 @@ const canvas = document.getElementById("canvas")
 /** @type {CanvasRenderingContext2D} */
 // @ts-ignore
 const ctx = canvas.getContext("2d")
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
 
 /** @type {HTMLInputElement} */
 // @ts-ignore
@@ -115,10 +113,16 @@ document.body.addEventListener("keypress", (event) => {
         $username.focus()
     }
 })
-
+const ppx = 1
+canvas.width = window.innerWidth / ppx
+canvas.height = window.innerHeight / ppx
+canvas.style.width = window.innerWidth + "px"
+canvas.style.height = window.innerHeight + "px"
 window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    canvas.width = window.innerWidth / ppx
+    canvas.height = window.innerHeight / ppx
+    canvas.style.width = canvas.width / ppx + "px"
+    canvas.style.height = canvas.height / ppx + "px"
     render()
 })
 
@@ -169,19 +173,22 @@ function update() {
     }
 }
 
+ctx.resetTransform = () => {
+    Object.getPrototypeOf(ctx).resetTransform.call(ctx)
+    ctx.scale(1 / ppx, 1 / ppx)
+}
+// make canvas context render without antialiasing
+ctx.filter =
+    "url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmaWx0ZXIgaWQ9ImZpbHRlciIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSJzUkdCIj48ZmVDb21wb25lbnRUcmFuc2Zlcj48ZmVGdW5jUiB0eXBlPSJpZGVudGl0eSIvPjxmZUZ1bmNHIHR5cGU9ImlkZW50aXR5Ii8+PGZlRnVuY0IgdHlwZT0iaWRlbnRpdHkiLz48ZmVGdW5jQSB0eXBlPSJkaXNjcmV0ZSIgdGFibGVWYWx1ZXM9IjAgMSIvPjwvZmVDb21wb25lbnRUcmFuc2Zlcj48L2ZpbHRlcj48L3N2Zz4=#filter)"
+
 function render() {
     ctx.resetTransform()
-    const ratio =
-        (($skybox.naturalWidth / canvas.width) * canvas.height) / $skybox.naturalHeight
-    const x = ((time * 1) % (canvas.width * ratio)) - canvas.width * ratio
-    ctx.drawImage($skybox, x, 0, canvas.width * ratio, canvas.height)
-    ctx.drawImage(
-        $skybox,
-        x + canvas.width * ratio,
-        0,
-        canvas.width * ratio,
-        canvas.height,
-    )
+    const width = canvas.width
+    const height = canvas.height * ppx
+    const ratio = (($skybox.naturalWidth / width) * height) / $skybox.naturalHeight
+    const x = ((time * 1) % (width * ratio)) - width * ratio
+    ctx.drawImage($skybox, x, 0, width * ratio, height)
+    ctx.drawImage($skybox, x + width * ratio, 0, width * ratio, height)
     playerKite.render(ctx)
     for (const connection of connections.values()) {
         connection.kite.render(ctx)
