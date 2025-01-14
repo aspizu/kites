@@ -1,5 +1,7 @@
 // @ts-check
 
+import {Thread} from "./thread.js"
+
 /** @type {HTMLImageElement} */
 // @ts-ignore
 const $cursor = document.getElementById("cursor")
@@ -17,8 +19,12 @@ export class Kite {
     bx
     /** @type {number} */
     by
-    /** @type {Array<{x: number, y: number}>} */
-    points
+    /** @type {Thread} */
+    tail1
+    /** @type {Thread} */
+    tail2
+    /** @type {Thread} */
+    tail3
     /** @type {boolean} */
     isCurrentPlayer
 
@@ -36,14 +42,34 @@ export class Kite {
         this.y = y
         this.bx = this.x
         this.by = this.y
-        this.points = []
+        this.tail1 = new Thread({
+            x: 0,
+            y: 0,
+            length: 10,
+            strokeStyle: `rgb(${this.color.r / 2}, ${this.color.g}, ${this.color.b})`,
+            lineWidth: 15,
+            segmentLength: 15,
+            elasticity: 1,
+        })
+        this.tail2 = new Thread({
+            x: 0,
+            y: 0,
+            length: 10,
+            strokeStyle: `rgb(${this.color.r}, ${this.color.g / 2}, ${this.color.b})`,
+            lineWidth: 5,
+            segmentLength: 20,
+            elasticity: 1.5,
+        })
+        this.tail3 = new Thread({
+            x: 0,
+            y: 0,
+            length: 10,
+            strokeStyle: `rgb(${this.color.r}, ${this.color.g}, ${this.color.b / 2})`,
+            lineWidth: 4,
+            segmentLength: 10,
+            elasticity: 0.9,
+        })
         this.isCurrentPlayer = isCurrentPlayer
-        for (let i = 0; i < 10; i++) {
-            this.points.push({
-                x: 0,
-                y: i * 15,
-            })
-        }
     }
 
     getAngle() {
@@ -57,19 +83,15 @@ export class Kite {
         const angle = this.getAngle()
         this.bx += (this.x + Math.sin(time / 10) * 10 - this.bx) * 0.1
         this.by += (this.y + 100 - this.by) * 0.1
-        const last = {
-            x: this.x - Math.cos(angle) * (Math.sqrt(2) * 100),
-            y: this.y - Math.sin(angle) * (Math.sqrt(2) * 100) - 15,
-        }
-        let i = 0
-        for (const point of this.points) {
-            const fac = 1 / (i + 1)
-            point.x += (last.x - point.x) * fac
-            point.y += (last.y + 15 - point.y) * fac
-            last.x = point.x
-            last.y = point.y + 10
-            i++
-        }
+        this.tail1.x = this.x - Math.cos(angle) * (Math.sqrt(2) * (100 - 15))
+        this.tail1.y = this.y - Math.sin(angle) * (Math.sqrt(2) * (100 - 15))
+        this.tail2.x = this.tail1.x
+        this.tail2.y = this.tail1.y
+        this.tail3.x = this.tail1.x
+        this.tail3.y = this.tail1.y
+        this.tail1.update(time)
+        this.tail2.update(time)
+        this.tail3.update(time)
     }
 
     /**
@@ -77,17 +99,9 @@ export class Kite {
      */
     render(ctx) {
         const angle = this.getAngle()
-        ctx.resetTransform()
-        ctx.beginPath()
-        ctx.moveTo((this.x + this.bx) / 2, (this.y + this.by) / 2)
-        for (const point of this.points) {
-            ctx.lineTo(point.x, point.y)
-        }
-        ctx.strokeStyle = `rgb(${this.color.r * 0.8}, ${
-            this.color.g / 2
-        }, ${this.color.b * 0.8})`
-        ctx.lineWidth = 15
-        ctx.stroke()
+        this.tail1.render(ctx)
+        this.tail2.render(ctx)
+        this.tail3.render(ctx)
         ctx.resetTransform()
         ctx.translate(this.x, this.y)
         ctx.rotate(Math.PI * (1 / 2 + 1 / 4) + angle)
@@ -98,7 +112,7 @@ export class Kite {
         if (!this.isCurrentPlayer) {
             ctx.drawImage($cursor, 0, 0)
         }
-        ctx.fillStyle = "black"
+        ctx.fillStyle = "white"
         ctx.font = "bold 12px sans-serif"
         ctx.fillText(this.username, 10, 10)
     }

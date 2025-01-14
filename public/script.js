@@ -125,7 +125,8 @@ function update() {
 
 function render() {
     ctx.resetTransform()
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = "black"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
     playerKite.render(ctx)
     for (const connection of connections.values()) {
         connection.kite.render(ctx)
