@@ -1,6 +1,8 @@
 // @ts-check
 
 export class Kite {
+    /** @type {string} */
+    username
     /** @type {{r: number, g: number, b: number}} */
     color
     /** @type {number} */
@@ -19,7 +21,8 @@ export class Kite {
      * @param {number} y
      * @param {{r: number, g: number, b: number}} color
      */
-    constructor(x, y, color) {
+    constructor(username, x, y, color) {
+        this.username = username
         this.color = color
         this.x = x
         this.y = y
@@ -81,5 +84,10 @@ export class Kite {
         ctx.rotate(Math.PI * (1 / 2 + 1 / 4) + angle)
         ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`
         ctx.fillRect(0, 0, 100, 100)
+        ctx.resetTransform()
+        ctx.translate(this.x, this.y)
+        ctx.fillStyle = "black"
+        ctx.font = "bold 12px sans-serif"
+        ctx.fillText(this.username, 10, 10)
     }
 }
